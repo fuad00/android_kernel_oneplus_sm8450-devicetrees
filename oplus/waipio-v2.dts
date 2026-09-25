@@ -1,6 +1,7 @@
 /dts-v1/;
 
 #include "../qcom/waipio-v2.dtsi"
+#include "waipio_oplus_memory.dtsi"
 
 / {
 	model = "Qualcomm Technologies, Inc. Waipio v2 SoC";

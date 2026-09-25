@@ -1,0 +1,44 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Memory map of the stock OnePlus 10 Pro (wly) base DTB.
+ *
+ * Mirrors the reserved-memory layout of the vendor_boot DTB shipped in
+ * OxygenOS NE2213_15.0.0.901(EX01), which the bundled 901 firmware
+ * (hyp, tz, cdsp) was validated with.
+ */
+
+&reserved_memory {
+	/* Not reserved on stock: returned to the kernel */
+	/delete-node/ oem_vm_region@bb000000;
+};
+
+&cdsp_secure_heap {
+	reg = <0x0 0x80c00000 0x0 0x100000>;
+};
+
+&qheebsp_reserved_mem {
+	reg = <0x0 0xe0000000 0x0 0x0>;
+};
+
+/*
+ * The Goodix optical fingerprint TA alone is ~12.6 MiB; with the default
+ * 16 MiB region and 4 MiB alignment it cannot be loaded (QSEECom_start_app
+ * fails with ENOMEM) and the fingerprint HAL crash-loops.
+ */
+&qseecom_ta_mem {
+	size = <0x0 0x2000000>;
+};
+
+/* Keep the kernel console in pstore across warm resets */
+&ramoops_mem {
+	size = <0x0 0x240000>;
+	console-size = <0x40000>;
+};
+
+&soc {
+	qcom,dma-heaps {
+		qcom,qseecom {
+			qcom,uncached-heap;
+		};
+	};
+};
